@@ -66,6 +66,7 @@ async def add_habit(habit: dict, user_id: str = Depends(verify_token)):
 @app.delete("/habits/{habit_id}")
 async def delete_habit(habit_id: UUID, user_id: str = Depends(verify_token)):
     try:
+        #Response needs to be setup with userid
         response = supabase.table("habits").delete().eq("id", str(habit_id)).execute()
 
 
