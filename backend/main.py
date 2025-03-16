@@ -26,6 +26,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+#Habits container
 habits = []
 
 ################### Defining a Habit model for validation
