@@ -36,7 +36,7 @@ class Habit(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello, FastAPI!"}
+    return {"message": "Api Connection Established"}
 
 
 ### Habit Routing
@@ -62,6 +62,7 @@ async def add_habit(habit: dict, user_id: str = Depends(verify_token)):
         raise HTTPException(status_code=500, detail=str(e))
     
 
+#User ID still needs to be setup
 @app.delete("/habits/{habit_id}")
 async def delete_habit(habit_id: UUID, user_id: str = Depends(verify_token)):
     try:
