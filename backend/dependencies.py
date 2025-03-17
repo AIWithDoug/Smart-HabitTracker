@@ -1,24 +1,34 @@
-from fastapi import HTTPException, Header, Depends
-from supabase_admin_client import supabase_admin  # 👈 make sure you import this
+from fastapi import HTTPException, Header
+from supabase_admin_client import supabase_admin
 
-async def verify_token(authorization: str = Header(...)):
+async def verify_token(authorization: str = Header(..., alias="Authorization")):
     try:
-        # Get the token from the header
+
         scheme, token = authorization.split()
 
         if scheme.lower() != 'bearer':
+            print("Invalid auth scheme")
             raise HTTPException(status_code=401, detail="Invalid auth scheme")
 
-        # Use Supabase Admin API to validate the token and get user
-        user_response = supabase_admin.auth.get_user(jwt=token)
+        # This is the critical line
+        user = supabase_admin.auth.get_user(token)
 
-        if not user_response or not user_response.user:
+        print(f"Supabase returned user: {user}")
+
+        if not user or not user.user:
+            print("No user found or user.user missing")
             raise HTTPException(status_code=401, detail="Invalid or expired token")
 
-        user_id = user_response.user.id
+        payload = {
+            "sub": user.user.id,
+            "email": user.user.email,
+        }
 
-        return user_id
+        print(f"Payload extracted: {payload}")
+
+        return payload
 
     except Exception as e:
         print(f"Token validation error: {e}")
         raise HTTPException(status_code=401, detail="Invalid or expired token")
+

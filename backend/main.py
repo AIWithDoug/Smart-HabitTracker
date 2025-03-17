@@ -46,15 +46,14 @@ def read_root():
 
 @app.get("/habits")
 async def get_habits(token_payload=Depends(verify_token)):
+
     try:
         user_id = token_payload["sub"]
         response = supabase.table("habits").select("*").eq("user_id", user_id).execute()
-
         return response.data
     except Exception as e:
         print("Exception caught in get_habits():", e)
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @app.post("/habits")
 async def add_habit(habit: dict, token_payload=Depends(verify_token)):

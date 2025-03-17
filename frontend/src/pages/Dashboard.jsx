@@ -13,7 +13,6 @@ function Dashboard() {
       const {
         data: { session },
       } = await supabase.auth.getSession();
-      console.log("Current session:", session);
     };
 
     CheckSession();
