@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchHabits, addHabit, deleteHabit } from "../services/api";
+import { supabase } from "../../supabaseClient";
 
 function Dashboard() {
   const [habits, setHabits] = useState([]);
@@ -8,6 +9,14 @@ function Dashboard() {
 
   // Fetch habits from the backend
   useEffect(() => {
+    const CheckSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      console.log("Current session:", session);
+    };
+
+    CheckSession();
     fetchHabits().then((data) => setHabits(data));
   }, []);
 

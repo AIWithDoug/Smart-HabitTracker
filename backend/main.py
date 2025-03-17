@@ -2,10 +2,8 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from supabase_client import supabase
-from uuid import UUID
 from dependencies import verify_token
 from dotenv import load_dotenv
-from typing import Optional
 
 load_dotenv
 app = FastAPI()
