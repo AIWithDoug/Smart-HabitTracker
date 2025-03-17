@@ -6,6 +6,7 @@ notes.txt
 # === Python / FastAPI (Backend) ===
 backend/venv/
 backend/__pycache__/
+backend/supabase_admin_client.py
 *.pyc
 *.pyo
 *.pyd

@@ -1,29 +1,24 @@
-from fastapi import HTTPException, Header
-from jose import jwt
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-
-
-JWT_SECRET = os.getenv("JWT_SECRET")
-JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
+from fastapi import HTTPException, Header, Depends
+from supabase_admin_client import supabase_admin  # 👈 make sure you import this
 
 async def verify_token(authorization: str = Header(...)):
     try:
+        # Get the token from the header
         scheme, token = authorization.split()
+
         if scheme.lower() != 'bearer':
             raise HTTPException(status_code=401, detail="Invalid auth scheme")
 
-        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        # Use Supabase Admin API to validate the token and get user
+        user_response = supabase_admin.auth.get_user(jwt=token)
 
-        user_id = payload.get('sub')
-        if not user_id:
-            raise HTTPException(status_code=401, detail="Invalid token payload")
+        if not user_response or not user_response.user:
+            raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+        user_id = user_response.user.id
 
         return user_id
 
     except Exception as e:
-        print(f"JWT validation error: {e}")
+        print(f"Token validation error: {e}")
         raise HTTPException(status_code=401, detail="Invalid or expired token")
