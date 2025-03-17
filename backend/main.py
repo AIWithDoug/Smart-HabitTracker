@@ -5,6 +5,7 @@ from supabase_client import supabase
 from uuid import UUID
 from dependencies import verify_token
 from dotenv import load_dotenv
+from typing import Optional
 
 load_dotenv
 app = FastAPI()
@@ -33,6 +34,10 @@ habits = []
 class Habit(BaseModel):
     name: str
 
+#########
+#user_id optional will need to be removed when auth is implimented.
+#including this for now so its actually able to function with local id
+
 
 @app.get("/")
 def read_root():
@@ -42,9 +47,10 @@ def read_root():
 ### Habit Routing
 
 @app.get("/habits")
-async def get_habits(user_id: str = Depends(verify_token)):
+async def get_habits(token_payload=Depends(verify_token)):
     try:
-        response = supabase.table("habits").select("*").execute()
+        user_id = token_payload["sub"]
+        response = supabase.table("habits").select("*").eq("user_id", user_id).execute()
 
         return response.data
     except Exception as e:
@@ -53,24 +59,33 @@ async def get_habits(user_id: str = Depends(verify_token)):
 
 
 @app.post("/habits")
-async def add_habit(habit: dict, user_id: str = Depends(verify_token)):
+async def add_habit(habit: dict, token_payload=Depends(verify_token)):
     try:
-        response = supabase.table("habits").insert(habit).execute()
+        user_id = token_payload["sub"]
+
+        new_habit = {
+            "name": habit.get("name"),
+            "completed": habit.get("completed", False),
+            "user_id": user_id
+        }
+        response = supabase.table("habits").insert(new_habit).execute()
 
         return response.data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
 
-#User ID still needs to be setup
 @app.delete("/habits/{habit_id}")
-async def delete_habit(habit_id: UUID, user_id: str = Depends(verify_token)):
+async def delete_habit(habit_id: str, token_payload=Depends(verify_token)):
     try:
-        #Response needs to be setup with userid
-        response = supabase.table("habits").delete().eq("id", str(habit_id)).execute()
+        user_id = token_payload["sub"]
+        response = supabase.table("habits").delete().eq("id",habit_id).eq("user_id", user_id).execute()
 
-
-        return {"message": f"Habit {habit_id} deleted"}
+        if response.data:
+            return {"message": f"Habit {habit_id} deleted"}
+        
+        raise HTTPException(status_code=404, detail="Habit not found or not authorized")
+    
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
