@@ -5,18 +5,40 @@ import { supabase } from "../../supabaseClient";
 function Dashboard() {
   const [habits, setHabits] = useState([]);
   const [newHabit, setNewHabit] = useState([]);
+  const [userEmail, setUserEmail] = useState([]);
 
   // Fetch habits from the backend
   useEffect(() => {
     const CheckSession = async () => {
       const {
         data: { session },
+        error,
       } = await supabase.auth.getSession();
+
+      //If there is a session set the email
+      if (session) {
+        setUserEmail(session.user.email);
+      } else {
+        setUserEmail(""); //not signed in
+      }
     };
 
     CheckSession();
     fetchHabits().then((data) => setHabits(data));
   }, []);
+
+  // Handle signing out
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setUserEmail("");
+    //potentially setup redirect to login page
+  };
+
+  // Handle signing in
+  const handleSignIn = async () => {
+    await supabase.auth.signIn();
+    setUserEmail(session.user.email);
+  };
 
   // Handle submitting a new habit
   const handleAddHabit = async (e) => {
@@ -69,6 +91,27 @@ function Dashboard() {
             <a href="#">List Option</a>
           </li>
         </ul>
+        {userEmail && (
+          <div className="mt-4">
+            <p className="text-sm mb-2">Signed in as: {userEmail}</p>
+            <button
+              onClick={handleSignOut}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            >
+              Sign Out
+            </button>
+          </div>
+        )}
+        {!userEmail && (
+          <div className="mt-4">
+            <button
+              onClick={handleSignIn}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Sign In
+            </button>
+          </div>
+        )}
       </div>
       <div className="flex-grow p-10">
         {/* Add New Habit Form */}
