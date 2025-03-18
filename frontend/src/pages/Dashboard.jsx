@@ -5,7 +5,6 @@ import { supabase } from "../../supabaseClient";
 function Dashboard() {
   const [habits, setHabits] = useState([]);
   const [newHabit, setNewHabit] = useState([]);
-  const [quotes, setQuotes] = useState([]);
 
   // Fetch habits from the backend
   useEffect(() => {
@@ -17,16 +16,6 @@ function Dashboard() {
 
     CheckSession();
     fetchHabits().then((data) => setHabits(data));
-  }, []);
-
-  // Fetch quotes from the backend (or leave static later)
-  useEffect(() => {
-    // If you're hardcoding quotes later, you can replace this
-    setQuotes([
-      { id: 1, text: "Stay hungry. Stay foolish." },
-      { id: 2, text: "Discipline equals freedom." },
-      { id: 3, text: "You miss 100% of the shots you don't take." },
-    ]);
   }, []);
 
   // Handle submitting a new habit
@@ -62,10 +51,10 @@ function Dashboard() {
         <h2 className="text-lg font-bold mb-4">Habit Tracker</h2>
         <ul>
           <li className="mt-2 hover:bg-gray-700 p-2 rounded">
-            <a href="#">List Option</a>
+            <a href="#">Create Task</a>
           </li>
           <li className="mt-2 hover:bg-gray-700 p-2 rounded">
-            <a href="#">List Option</a>
+            <a href="#">Daily Tasks</a>
           </li>
           <li className="mt-2 hover:bg-gray-700 p-2 rounded">
             <a href="#">List Option</a>
@@ -80,23 +69,8 @@ function Dashboard() {
             <a href="#">List Option</a>
           </li>
         </ul>
-        <div className="p-4 max-w-2xl mx-auto">
-          {/* Quotes Section */}
-          <h2 className="text-2xl font-bold mb-4">Motivational Quotes</h2>
-          <ul className="mb-8">
-            {quotes.length === 0 ? (
-              <p>Sorry, no quotes found!</p>
-            ) : (
-              quotes.map((quote) => (
-                <li key={quote.id} className="mb-2 p-2 border rounded">
-                  {quote.text}
-                </li>
-              ))
-            )}
-          </ul>
-        </div>
       </div>
-      <div className="flex-grow p-4">
+      <div className="flex-grow p-10">
         {/* Add New Habit Form */}
         <h2 className="text-3xl font-bold mb-4">Your Habits</h2>
         <form onSubmit={handleAddHabit} className="mb-4 flex items-center">
