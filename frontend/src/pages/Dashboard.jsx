@@ -51,7 +51,7 @@ function Dashboard() {
       setHabits(updatedHabits);
       setNewHabit(""); // Clear input field
     } catch (error) {
-      console.error("Error adding habit:", error);
+      console.error("Error adding habit: ", error);
     }
   };
 
