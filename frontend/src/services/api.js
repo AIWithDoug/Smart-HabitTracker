@@ -4,14 +4,19 @@ const API_BASE_URL = "http://127.0.0.1:8000";
 
 //Retrieve Session Token
 async function getAuthToken() {
-  const {
-    data: { session },
-    error,
-  } = await supabase.auth.getSession();
-  if (error || !session) {
-    throw new Error("No Valid Session");
+  try {
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.getSession();
+    if (error || !session) {
+      return null;
+    }
+    return session.access_token;
+  } catch (err) {
+    console.error("Failed to get auth token", err);
+    return null;
   }
-  return session.access_token;
 }
 
 const token = await getAuthToken();

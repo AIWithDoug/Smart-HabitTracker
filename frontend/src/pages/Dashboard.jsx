@@ -5,7 +5,7 @@ import { supabase } from "../../supabaseClient";
 function Dashboard() {
   const [habits, setHabits] = useState([]);
   const [newHabit, setNewHabit] = useState([]);
-  const [userEmail, setUserEmail] = useState([]);
+  const [userEmail, setUserEmail] = useState("");
 
   // Fetch habits from the backend
   useEffect(() => {
@@ -36,8 +36,19 @@ function Dashboard() {
 
   // Handle signing in
   const handleSignIn = async () => {
-    await supabase.auth.signIn();
-    setUserEmail(session.user.email);
+    const { error } = await supabase.auth.signIn();
+
+    if (error) {
+      console.error("Error Signing In: ", error);
+      return;
+    }
+
+    const { data } = await supabase.auth.getSession();
+    if (data.session) {
+      setUserEmail(data.session.user.email);
+    } else {
+      console.error("No valid session after signing in");
+    }
   };
 
   // Handle submitting a new habit
