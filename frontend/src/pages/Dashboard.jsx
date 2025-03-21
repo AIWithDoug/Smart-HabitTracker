@@ -24,6 +24,7 @@ function Dashboard() {
     };
 
     CheckSession();
+    //Set user data to retrieve the habits for frontend
     fetchHabits().then((data) => setHabits(data));
   }, []);
 
