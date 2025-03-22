@@ -5,10 +5,11 @@ import { supabase } from "../../supabaseClient";
 
 function Dashboard() {
   const [habits, setHabits] = useState([]);
-  const [newHabit, setNewHabit] = useState([]);
+  const [newHabit, setNewHabit] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   // Refined use effect
   useEffect(() => {
@@ -57,7 +58,11 @@ function Dashboard() {
   // Handle submitting a new habit
   const handleAddHabit = async (e) => {
     e.preventDefault();
-    if (!newHabit.trim()) return;
+    if (!newHabit.trim()) {
+      setError("Habit name cannot be empty");
+      return;
+    }
+    setError(null);
 
     try {
       await addHabit(newHabit);
@@ -65,6 +70,7 @@ function Dashboard() {
       setHabits(updatedHabits);
       setNewHabit(""); // Clear input field
     } catch (error) {
+      setError("Failed to add habit. Please Try again.");
       console.error("Error adding habit: ", error);
     }
   };
