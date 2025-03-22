@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { fetchHabits, addHabit, deleteHabit } from "../services/api";
 import { supabase } from "../../supabaseClient";
 
@@ -6,6 +7,7 @@ function Dashboard() {
   const [habits, setHabits] = useState([]);
   const [newHabit, setNewHabit] = useState([]);
   const [userEmail, setUserEmail] = useState("");
+  const navigate = useNavigate();
 
   // Fetch habits from the backend
   useEffect(() => {
@@ -36,20 +38,8 @@ function Dashboard() {
   };
 
   // Handle signing in
-  const handleSignIn = async () => {
-    const { error } = await supabase.auth.signIn();
-
-    if (error) {
-      console.error("Error Signing In: ", error);
-      return;
-    }
-
-    const { data } = await supabase.auth.getSession();
-    if (data.session) {
-      setUserEmail(data.session.user.email);
-    } else {
-      console.error("No valid session after signing in");
-    }
+  const handleSignInRed = () => {
+    navigate("/login");
   };
 
   // Handle submitting a new habit
@@ -117,7 +107,7 @@ function Dashboard() {
         {!userEmail && (
           <div className="mt-4">
             <button
-              onClick={handleSignIn}
+              onClick={handleSignInRed}
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             >
               Sign In
