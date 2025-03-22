@@ -7,28 +7,40 @@ function Dashboard() {
   const [habits, setHabits] = useState([]);
   const [newHabit, setNewHabit] = useState([]);
   const [userEmail, setUserEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Fetch habits from the backend
+  // Refined use effect
   useEffect(() => {
-    const CheckSession = async () => {
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
-
-      //If there is a session set the email
-      if (session) {
-        setUserEmail(session.user.email);
-      } else {
-        setUserEmail(""); //not signed in
-      }
-    };
-
-    CheckSession();
-    //Set user data to retrieve the habits for frontend
-    fetchHabits().then((data) => setHabits(data));
+    checkUserSession();
+    fetchUserHabits();
   }, []);
+
+  // Updated Fetch Habit functionality
+  const fetchUserHabits = async () => {
+    setIsLoading(true);
+    try {
+      const data = await fetchHabits();
+      setHabits(data);
+    } catch (error) {
+      console.log("Error fetching habits: ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Checking User Session
+  const checkUserSession = async () => {
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.getSession();
+    if (session) {
+      setUserEmail(session.user.email);
+    } else {
+      setUserEmail("");
+    }
+  };
 
   // Handle signing out
   const handleSignOut = async () => {
