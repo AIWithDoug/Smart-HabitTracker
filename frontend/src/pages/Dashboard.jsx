@@ -18,15 +18,29 @@ function Dashboard() {
   }, []);
 
   // Updated Fetch Habit functionality
+  // const fetchUserHabits = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const data = await fetchHabits();
+  //     setHabits(data);
+  //   } catch (error) {
+  //     console.log("Error fetching habits: ", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   const fetchUserHabits = async () => {
     setIsLoading(true);
-    try {
-      const data = await fetchHabits();
-      setHabits(data);
-    } catch (error) {
-      console.log("Error fetching habits: ", error);
-    } finally {
-      setIsLoading(false);
+    if (userEmail) {
+      try {
+        const data = await fetchHabits();
+        setHabits(data);
+      } catch (error) {
+        console.log("Error fetching habits: ", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
