@@ -122,7 +122,7 @@ function Dashboard() {
             <a href="#">List Option</a>
           </li>
           <li className="mt-2 hover:bg-gray-700 p-2 rounded">
-            <a href="#">List Option</a>
+            <a href="#">Settings</a>
           </li>
         </ul>
         {userEmail && (
