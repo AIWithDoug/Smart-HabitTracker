@@ -101,7 +101,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="flex">
+    <div className="flex flex-grow w-full min-h-screen">
       <div className="w-64 bg-gray-800 text-white h-screen p-4">
         {/* Left-hand nav */}
         <h2 className="text-lg font-bold mb-4">Habit Tracker</h2>
@@ -147,46 +147,24 @@ function Dashboard() {
           </div>
         )}
       </div>
-      <div className="flex-grow p-10">
-        {/* Add New Habit Form */}
-        <h2 className="text-3xl font-bold mb-4">Your Habits</h2>
-        <form onSubmit={handleAddHabit} className="mb-4 flex items-center">
-          <input
-            type="text"
-            value={newHabit}
-            onChange={(e) => setNewHabit(e.target.value)}
-            placeholder="Enter a new habit"
-            className="border p-2 mr-2 rounded flex-1"
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Add Habit
-          </button>
-        </form>
+      <div className="flex-1 grid grid-rows-2 grid-cols-2 gap-4">
+        {/* Overview: Top Left */}
+        <div className="row-span-1 col-span-1 bg-gray-100 p-4">
+          <h2>Overview</h2>
+          {/* Overview content goes here */}
+        </div>
 
-        {/* Habits List */}
-        <ul>
-          {habits.length === 0 ? (
-            <p>No habits found.</p>
-          ) : (
-            habits.map((habit) => (
-              <li
-                key={habit.id}
-                className="mb-2 p-2 border rounded flex justify-between items-center"
-              >
-                <span>{habit.name}</span>
-                <button
-                  onClick={() => handleDeleteHabit(habit.id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </li>
-            ))
-          )}
-        </ul>
+        {/* Projects and Tasks: Full Right Column */}
+        <div className="row-span-2 col-span-1 bg-gray-200 p-4">
+          <h2>Projects and Tasks</h2>
+          {/* Projects and tasks content goes here */}
+        </div>
+
+        {/* Bottom Left: Placeholder */}
+        <div className="row-span-1 col-span-1 bg-gray-300 p-4">
+          <h2>Placeholder</h2>
+          {/* Future content goes here */}
+        </div>
       </div>
     </div>
   );
