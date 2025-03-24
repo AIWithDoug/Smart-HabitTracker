@@ -1,13 +1,23 @@
-function HabitForm() {
+function HabitForm({ onAddHabit, onHabitChange, newHabit }) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!newHabit.trim() === "") {
+      console.log("Input can't be empty"); //Update to display jsx later
+      return;
+    }
+    onAddHabit(newHabit, e);
+    onHabitChange("");
+  };
+
   return (
     <div>
       {/* Add New Habit Form */}
       <h2 className="text-3xl font-bold mb-4">Your Habits</h2>
-      <form onSubmit={handleAddHabit} className="mb-4 flex items-center">
+      <form onSubmit={handleSubmit} className="mb-4 flex items-center">
         <input
           type="text"
           value={newHabit}
-          onChange={(e) => setNewHabit(e.target.value)}
+          onChange={(e) => onHabitChange(e.target.value)}
           placeholder="Enter a new habit"
           className="border p-2 mr-2 rounded flex-1"
         />
@@ -18,28 +28,6 @@ function HabitForm() {
           Add Habit
         </button>
       </form>
-
-      {/* Habits List */}
-      <ul>
-        {habits.length === 0 ? (
-          <p>No habits found.</p>
-        ) : (
-          habits.map((habit) => (
-            <li
-              key={habit.id}
-              className="mb-2 p-2 border rounded flex justify-between items-center"
-            >
-              <span>{habit.name}</span>
-              <button
-                onClick={() => handleDeleteHabit(habit.id)}
-                className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-              >
-                Delete
-              </button>
-            </li>
-          ))
-        )}
-      </ul>
     </div>
   );
 }

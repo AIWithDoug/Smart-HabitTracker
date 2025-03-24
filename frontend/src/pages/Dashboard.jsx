@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchHabits, addHabit, deleteHabit } from "../services/api";
 import { supabase } from "../../supabaseClient";
+import HabitForm from "../components/HabitForm";
 
 function Dashboard() {
   const [habits, setHabits] = useState([]);
@@ -16,19 +17,6 @@ function Dashboard() {
     checkUserSession();
     fetchUserHabits();
   }, []);
-
-  // Updated Fetch Habit functionality
-  // const fetchUserHabits = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const data = await fetchHabits();
-  //     setHabits(data);
-  //   } catch (error) {
-  //     console.log("Error fetching habits: ", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const fetchUserHabits = async () => {
     setIsLoading(true);
@@ -70,7 +58,7 @@ function Dashboard() {
   };
 
   // Handle submitting a new habit
-  const handleAddHabit = async (e) => {
+  const handleAddHabit = async (newHabit, e) => {
     e.preventDefault();
     if (!newHabit.trim()) {
       setError("Habit name cannot be empty");
@@ -177,6 +165,32 @@ function Dashboard() {
         <div className="row-span-2 col-span-1 border-2 border-solid p-4">
           <h2>Projects and Tasks</h2>
           {/* Projects and tasks content goes here */}
+          <HabitForm
+            newHabit={newHabit}
+            onAddHabit={handleAddHabit}
+            onHabitChange={setNewHabit}
+          />
+          {/* Habits List */}
+          <ul>
+            {habits.length === 0 ? (
+              <p>No habits found.</p>
+            ) : (
+              habits.map((habit) => (
+                <li
+                  key={habit.id}
+                  className="mb-2 p-2 border rounded flex justify-between items-center"
+                >
+                  <span>{habit.name}</span>
+                  <button
+                    onClick={() => handleDeleteHabit(habit.id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
         </div>
 
         {/* Bottom Left: Placeholder */}
