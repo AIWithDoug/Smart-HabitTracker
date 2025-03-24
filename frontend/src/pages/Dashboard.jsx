@@ -102,66 +102,85 @@ function Dashboard() {
 
   return (
     <div className="flex flex-grow w-full min-h-screen">
-      <div className="w-64 bg-gray-800 text-white h-screen p-4">
+      <div className="w-64 bg-gray-800 text-white h-screen p-4 flex flex-col">
         {/* Left-hand nav */}
         <h2 className="text-lg font-bold mb-4">Habit Tracker</h2>
-        <ul>
-          <li className="mt-2 hover:bg-gray-700 p-2 rounded">
-            <a href="#">Create Task</a>
-          </li>
-          <li className="mt-2 hover:bg-gray-700 p-2 rounded">
-            <a href="#">Daily Tasks</a>
-          </li>
-          <li className="mt-2 hover:bg-gray-700 p-2 rounded">
-            <a href="#">List Option</a>
-          </li>
-          <li className="mt-2 hover:bg-gray-700 p-2 rounded">
-            <a href="#">List Option</a>
-          </li>
-          <li className="mt-2 hover:bg-gray-700 p-2 rounded">
-            <a href="#">List Option</a>
-          </li>
-          <li className="mt-2 hover:bg-gray-700 p-2 rounded">
-            <a href="#">Settings</a>
-          </li>
-        </ul>
-        {userEmail && (
-          <div className="mt-4">
-            <p className="text-sm mb-2">Signed in as: {userEmail}</p>
-            <button
-              onClick={handleSignOut}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            >
-              Sign Out
-            </button>
+        <div id="topnav" className="flex flex-1">
+          <ul>
+            <li className="mt-2 hover:bg-gray-700 p-2 rounded">
+              <button>Create Task</button>
+            </li>
+            <li className="mt-2 hover:bg-gray-700 p-2 rounded">
+              <a href="#">Daily Tasks</a>
+            </li>
+            <li className="mt-2 hover:bg-gray-700 p-2 rounded">
+              <a href="#">Projects</a>
+            </li>
+            <li className="mt-2 hover:bg-gray-700 p-2 rounded">
+              <a href="#">Achievements</a>
+            </li>
+            <li className="mt-2 hover:bg-gray-700 p-2 rounded">
+              <a href="#">Streaks</a>
+            </li>
+            <li className="mt-2 hover:bg-gray-700 p-2 rounded">
+              <a href="#">Explore</a>
+            </li>
+          </ul>
+        </div>
+        <div id="botnav" className="flex flex-col justify-end">
+          <div>
+            <div>
+              <ul>
+                <li className="mt-2 hover:bg-gray-700 p-2 rounded">
+                  <a href="#">Invite</a>
+                </li>
+                <li className="mt-2 hover:bg-gray-700 p-2 rounded">
+                  <a href="#">Daily Tasks</a>
+                </li>
+                <li className="mt-2 hover:bg-gray-700 p-2 rounded">
+                  <a href="#">Settings</a>
+                </li>
+              </ul>
+            </div>
           </div>
-        )}
-        {!userEmail && (
-          <div className="mt-4">
-            <button
-              onClick={handleSignInRed}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            >
-              Sign In
-            </button>
-          </div>
-        )}
+          {userEmail && (
+            <div className="mt-4">
+              <p className="text-sm mb-2">Signed in as: {userEmail}</p>
+              <button
+                onClick={handleSignOut}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Sign Out
+              </button>
+            </div>
+          )}
+          {!userEmail && (
+            <div className="mt-4">
+              <button
+                onClick={handleSignInRed}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Sign In
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-      <div className="flex-1 grid grid-rows-2 grid-cols-2 gap-4">
+      <div className="flex-1 grid grid-rows-2 grid-cols-2 gap-4 p-5">
         {/* Overview: Top Left */}
-        <div className="row-span-1 col-span-1 bg-gray-100 p-4">
+        <div className="row-span-1 col-span-1 border-2 border-solid p-4">
           <h2>Overview</h2>
           {/* Overview content goes here */}
         </div>
 
         {/* Projects and Tasks: Full Right Column */}
-        <div className="row-span-2 col-span-1 bg-gray-200 p-4">
+        <div className="row-span-2 col-span-1 border-2 border-solid p-4">
           <h2>Projects and Tasks</h2>
           {/* Projects and tasks content goes here */}
         </div>
 
         {/* Bottom Left: Placeholder */}
-        <div className="row-span-1 col-span-1 bg-gray-300 p-4">
+        <div className="row-span-1 col-span-1 border-2 border-solid p-4">
           <h2>Placeholder</h2>
           {/* Future content goes here */}
         </div>
