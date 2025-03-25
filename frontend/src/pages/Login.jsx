@@ -1,31 +1,37 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
 
-export default function Login() {
+export default function Login({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
+      if (error) throw error;
+
+      // Call the onLogin prop passed from parent
+      onLogin(data.user.email);
+
+      // Navigate to dashboard
+      navigate("/dashboard");
+    } catch (error) {
       setError(error.message);
-    } else {
-      alert("Logged in!");
-      // Optional: Redirect or refresh to get session active in your dashboard
-      window.location.href = "/dashboard"; // Replace with your route
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
